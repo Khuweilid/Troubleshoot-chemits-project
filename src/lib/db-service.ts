@@ -1,5 +1,5 @@
-// Import mock data instead of using mysql2 in browser environment
-// import { pool } from "./db-connection";
+import { pool } from "./db-connection";
+import { hashPassword, verifyPassword } from "./db-utils";
 
 export interface User {
   id: number;
@@ -42,19 +42,69 @@ export interface KnowledgeArticle {
 }
 
 class DatabaseService {
+  // User registration
+  async registerUser(
+    name: string,
+    email: string,
+    password: string,
+  ): Promise<User | null> {
+    try {
+      // Check if user already exists
+      const existingUser = await this.getUserByEmail(email);
+      if (existingUser) {
+        throw new Error("User with this email already exists");
+      }
+
+      // Hash the password
+      const hashedPassword = hashPassword(password);
+
+      // Insert the new user
+      const [result] = await pool.query(
+        "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)",
+        [name, email, hashedPassword, "user"],
+      );
+
+      if (result && "insertId" in result) {
+        // Return the newly created user (without password)
+        return {
+          id: result.insertId as number,
+          name,
+          email,
+          role: "user",
+        };
+      }
+      return null;
+    } catch (error) {
+      console.error("Error registering user:", error);
+      throw error;
+    }
+  }
   // User methods
   async getUserByEmail(email: string): Promise<User | null> {
     console.log(`Getting user with email: ${email}`);
-    // Using mock data for browser environment
-    if (email === "admin@example.com") {
-      return {
-        id: 1,
-        name: "Tech Chemist",
-        email: "admin@example.com",
-        role: "admin",
-      };
+    try {
+      const [rows] = await pool.query(
+        "SELECT id, name, email, role FROM users WHERE email = ?",
+        [email],
+      );
+
+      if (Array.isArray(rows) && rows.length > 0) {
+        return rows[0] as User;
+      }
+      return null;
+    } catch (error) {
+      console.error("Database error:", error);
+      // Fallback to mock data if database connection fails
+      if (email === "admin@example.com") {
+        return {
+          id: 1,
+          name: "Tech Chemist",
+          email: "admin@example.com",
+          role: "admin",
+        };
+      }
+      return null;
     }
-    return null;
   }
 
   async validateUserCredentials(
@@ -62,16 +112,50 @@ class DatabaseService {
     password: string,
   ): Promise<User | null> {
     console.log(`Validating credentials for: ${email}`);
-    // Using mock data for browser environment
-    if (email === "admin@example.com" && password === "password") {
-      return {
-        id: 1,
-        name: "Tech Chemist",
-        email: "admin@example.com",
-        role: "admin",
-      };
+    try {
+      const [rows] = await pool.query(
+        "SELECT id, name, email, role, password FROM users WHERE email = ?",
+        [email],
+      );
+
+      if (Array.isArray(rows) && rows.length > 0) {
+        const user = rows[0] as User & { password: string };
+
+        // Check if password matches
+        // For the default admin user with the hardcoded password
+        if (email === "admin@example.com" && password === "password") {
+          return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+          };
+        }
+
+        // For other users, verify the hashed password
+        if (verifyPassword(password, user.password)) {
+          return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+          };
+        }
+      }
+      return null;
+    } catch (error) {
+      console.error("Database error:", error);
+      // Fallback to mock data if database connection fails
+      if (email === "admin@example.com" && password === "password") {
+        return {
+          id: 1,
+          name: "Tech Chemist",
+          email: "admin@example.com",
+          role: "admin",
+        };
+      }
+      return null;
     }
-    return null;
   }
 
   // Network devices methods

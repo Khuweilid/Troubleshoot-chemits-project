@@ -13,6 +13,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
+  register: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
   error: string | null;
 }
@@ -22,6 +23,7 @@ const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
   isLoading: true,
   login: async () => {},
+  register: async () => {},
   logout: () => {},
   error: null,
 });
@@ -88,6 +90,32 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setUser(null);
   };
 
+  const register = async (name: string, email: string, password: string) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      // Register the user using the database service
+      const registeredUser = await dbService.registerUser(
+        name,
+        email,
+        password,
+      );
+
+      if (registeredUser) {
+        // Automatically log in the user after registration
+        localStorage.setItem("user", JSON.stringify(registeredUser));
+        setUser(registeredUser);
+      } else {
+        throw new Error("Failed to register user");
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -95,6 +123,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         isAuthenticated: !!user,
         isLoading,
         login,
+        register,
         logout,
         error,
       }}

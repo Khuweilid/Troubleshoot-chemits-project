@@ -55,6 +55,7 @@ const Sidebar = ({
 }: SidebarProps) => {
   const [collapsed, setCollapsed] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [activeMenu, setActiveMenu] = useState<string>(activeItem);
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
@@ -100,8 +101,11 @@ const Sidebar = ({
             key={item.id}
             icon={item.icon}
             label={item.label}
-            active={activeItem === item.id}
-            onClick={() => onItemClick(item.id)}
+            active={activeMenu === item.id}
+            onClick={() => {
+              setActiveMenu(item.id);
+              onItemClick(item.id);
+            }}
             collapsed={collapsed}
           />
         ))}
@@ -118,7 +122,10 @@ const Sidebar = ({
           icon={LogOut}
           label="Logout"
           collapsed={collapsed}
-          onClick={() => onItemClick("logout")}
+          onClick={() => {
+            setActiveMenu("logout");
+            onItemClick("logout");
+          }}
         />
 
         {!collapsed && (
