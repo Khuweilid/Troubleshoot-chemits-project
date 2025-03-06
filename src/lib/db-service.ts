@@ -1,7 +1,5 @@
-import { dbConfig } from "./database";
-
-// This is a placeholder for actual database service implementation
-// In a real application, you would implement actual database queries
+// Import mock data instead of using mysql2 in browser environment
+// import { pool } from "./db-connection";
 
 export interface User {
   id: number;
@@ -43,12 +41,11 @@ export interface KnowledgeArticle {
   updatedAt: Date;
 }
 
-// Mock implementation of database service
 class DatabaseService {
   // User methods
   async getUserByEmail(email: string): Promise<User | null> {
     console.log(`Getting user with email: ${email}`);
-    // In a real app, you would query the database
+    // Using mock data for browser environment
     if (email === "admin@example.com") {
       return {
         id: 1,
@@ -65,7 +62,7 @@ class DatabaseService {
     password: string,
   ): Promise<User | null> {
     console.log(`Validating credentials for: ${email}`);
-    // In a real app, you would verify the password against the hashed password in the database
+    // Using mock data for browser environment
     if (email === "admin@example.com" && password === "password") {
       return {
         id: 1,
@@ -79,7 +76,7 @@ class DatabaseService {
 
   // Network devices methods
   async getNetworkDevices(): Promise<NetworkDevice[]> {
-    // In a real app, you would query the database
+    // Using mock data for browser environment
     return [
       {
         id: 1,
@@ -104,7 +101,7 @@ class DatabaseService {
 
   // Knowledge base methods
   async getKnowledgeArticles(): Promise<KnowledgeArticle[]> {
-    // In a real app, you would query the database
+    // Using mock data for browser environment
     return [
       {
         id: 1,

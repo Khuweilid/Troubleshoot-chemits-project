@@ -114,7 +114,12 @@ const Sidebar = ({
         </div>
 
         <SidebarItem icon={Settings} label="Settings" collapsed={collapsed} />
-        <SidebarItem icon={LogOut} label="Logout" collapsed={collapsed} />
+        <SidebarItem
+          icon={LogOut}
+          label="Logout"
+          collapsed={collapsed}
+          onClick={() => onItemClick("logout")}
+        />
 
         {!collapsed && (
           <div className="px-4 py-4 mt-4 bg-gray-800 rounded-lg">

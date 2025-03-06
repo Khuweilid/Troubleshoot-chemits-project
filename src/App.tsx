@@ -4,7 +4,14 @@ import Home from "./components/home";
 import LoginPage from "./pages/LoginPage";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import { AuthProvider } from "./components/auth/AuthContext";
-import routes from "tempo-routes";
+
+// Import tempo routes safely
+let routes = [];
+try {
+  routes = require("tempo-routes").default;
+} catch (error) {
+  console.log("Tempo routes not available, using empty routes");
+}
 
 function App() {
   return (
@@ -32,7 +39,9 @@ function App() {
               <Route path="/tempobook/*" element={<div />} />
             )}
           </Routes>
-          {import.meta.env.VITE_TEMPO === "true" && useRoutes(routes)}
+          {import.meta.env.VITE_TEMPO === "true" &&
+            routes.length > 0 &&
+            useRoutes(routes)}
         </>
       </Suspense>
     </AuthProvider>
