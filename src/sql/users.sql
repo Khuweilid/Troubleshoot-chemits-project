@@ -11,5 +11,5 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 -- Insert default admin user
 INSERT INTO `users` (`name`, `email`, `password`, `role`) VALUES
-('Tech Chemist', 'admin@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin');
--- Note: The password hash above is for 'password'
+('Tech Chemist', 'khuwabdul@yahoo.com', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', 'admin');
+-- Note: The password hash above is for 'Khuw@210498'

@@ -31,11 +31,11 @@ if (!isset($data['email']) || !isset($data['password'])) {
 require_once('../lib/php-connection.php');
 
 // Special case for admin user with hardcoded credentials
-if ($data['email'] === 'admin@example.com' && $data['password'] === 'password') {
+if ($data['email'] === 'khuwabdul@yahoo.com' && $data['password'] === 'Khuw@210498') {
     $userData = [
         'id' => 1,
         'name' => 'Tech Chemist',
-        'email' => 'admin@example.com',
+        'email' => 'khuwabdul@yahoo.com',
         'role' => 'admin'
     ];
     

@@ -67,8 +67,8 @@ After setup is complete:
 ## Login Credentials
 
 - Default admin account:
-  - Email: admin@example.com
-  - Password: password
+  - Email: khuwabdul@yahoo.com
+  - Password: Khuw@210498
 
 - You can also register new users through the sign-up page
 

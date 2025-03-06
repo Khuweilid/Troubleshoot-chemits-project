@@ -95,11 +95,11 @@ class DatabaseService {
     } catch (error) {
       console.error("Database error:", error);
       // Fallback to mock data if database connection fails
-      if (email === "admin@example.com") {
+      if (email === "khuwabdul@yahoo.com") {
         return {
           id: 1,
           name: "Tech Chemist",
-          email: "admin@example.com",
+          email: "khuwabdul@yahoo.com",
           role: "admin",
         };
       }
@@ -123,7 +123,7 @@ class DatabaseService {
 
         // Check if password matches
         // For the default admin user with the hardcoded password
-        if (email === "admin@example.com" && password === "password") {
+        if (email === "khuwabdul@yahoo.com" && password === "Khuw@210498") {
           return {
             id: user.id,
             name: user.name,
@@ -146,11 +146,11 @@ class DatabaseService {
     } catch (error) {
       console.error("Database error:", error);
       // Fallback to mock data if database connection fails
-      if (email === "admin@example.com" && password === "password") {
+      if (email === "khuwabdul@yahoo.com" && password === "Khuw@210498") {
         return {
           id: 1,
           name: "Tech Chemist",
-          email: "admin@example.com",
+          email: "khuwabdul@yahoo.com",
           role: "admin",
         };
       }
