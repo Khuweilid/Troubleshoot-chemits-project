@@ -55,7 +55,8 @@ const Sidebar = ({
 }: SidebarProps) => {
   const [collapsed, setCollapsed] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
-  const [activeMenu, setActiveMenu] = useState<string>(activeItem);
+  // Use the activeItem prop directly instead of local state to ensure it reflects the current selection
+  const activeMenu = activeItem;
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
@@ -103,7 +104,6 @@ const Sidebar = ({
             label={item.label}
             active={activeMenu === item.id}
             onClick={() => {
-              setActiveMenu(item.id);
               onItemClick(item.id);
             }}
             collapsed={collapsed}
@@ -123,7 +123,6 @@ const Sidebar = ({
           label="Logout"
           collapsed={collapsed}
           onClick={() => {
-            setActiveMenu("logout");
             onItemClick("logout");
           }}
         />

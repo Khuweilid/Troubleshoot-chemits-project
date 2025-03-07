@@ -69,7 +69,40 @@ class DatabaseService {
       // Hash the password
       const hashedPassword = hashPassword(password);
 
-      // Insert the new user
+      // Try to save to XAMPP database first
+      try {
+        // Try to use PHP API if available
+        const response = await fetch("/troubleshoot-chemist/api/register.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name,
+            email,
+            password: hashedPassword,
+            role: "user",
+          }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success) {
+            return {
+              id: data.userId,
+              name,
+              email,
+              role: "user",
+            };
+          }
+        }
+      } catch (phpError) {
+        console.log(
+          "PHP API not available, falling back to Node.js or mock data",
+        );
+      }
+
+      // Insert the new user using Node.js if available
       if (pool) {
         const [result] = await pool.query(
           "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)",

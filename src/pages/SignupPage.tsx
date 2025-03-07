@@ -54,7 +54,12 @@ const SignupPage = () => {
 
     // Register the user
     try {
-      await register(name, email, password);
+      const result = await register(name, email, password);
+      if (result) {
+        // Redirect to login page after successful registration
+        window.location.href = "/login";
+        return;
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Registration failed");
     } finally {
